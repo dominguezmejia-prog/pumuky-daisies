@@ -1,6 +1,14 @@
+// Pumuky Flor garden daisy counter.
+// POST {"n": 1..20} adds daisies anonymously. GET returns {"total": number}.
+// Nothing about the visitor is stored: each daisy is saved as a tiny key with only a time, a random tag and the number.
 import { getStore } from "@netlify/blobs";
 
-const ALLOWED = ["https://pumukyflor.com", "https://www.pumukyflor.com", "https://8ni092-ji.myshopify.com"];
+const ALLOWED = [
+  "https://pumukyflor.com",
+  "https://www.pumukyflor.com",
+  "https://8ni092-ji.myshopify.com",
+  "https://pumukyflor-world.netlify.app",
+];
 
 function cors(origin) {
   const ok = ALLOWED.includes(origin);
@@ -13,7 +21,7 @@ function cors(origin) {
   };
 }
 
-async function gardenTotal(store) {
+export async function gardenTotal(store) {
   const base = Number((await store.get("total", { consistency: "strong" })) || 0);
   const { blobs } = await store.list({ prefix: "e/" });
   let pending = 0;
